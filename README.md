@@ -3,3 +3,16 @@
 Le vTaskDelay(100) prend 100 tick du timer 6 mais un tick ne vaut pas forcement 1 ms donc on aura pas forcement 100 ms de wait 
 
 Grace au maccro portTICK_PERIOD_MS, on règle le fait qu'un tick vale 1 ms (ou autres valeur mais ici c'est 1 ms qui nous interesse) 
+
+
+Semaphore binaire : Permet la synchronisation de deux taches (une qui se lance et qui reveille l'autre ensuite)
+Semaphore mutex (mutual exclusion) : Permet de finir une tache avant d'en lancer une autre meme si elle avait du se lancer
+
+Exemple : Tache 2 + prioritaire que tache 1, elle se lance au plein milieu de la tache 1. Avec un mutex, elle va se lancer et bloquer au take qui s'execute avant le printf
+puis on va retourner dans la tache 1 jusqu'au give qui va reveiller la tache 2. Du coup on a les printf qui s'execute l'un après l'autre et on a plus le problème d'écriture
+
+
+Si on utilise la fonction HAL_UART_Receive pour traiter les caractères, c'est une boucle infini => on bloque le micro jusqu'a qu'on recoive un char. 
+
+On utilise la fonction HAL_UART_Receive_IT (dans la fonction uart_read dans le fichier shell.C) qui active les interruptions sur caractere et on utilise un semaphore take pour bloquer la tache et qui est give par la fonction shell_uart_receive_irq_cb qui est dans le fichier shell.c
+Cette fonction est appelé par la fonction HAL_UART_RxCpltCallback qui est dans le fichier main et appelée lors d'une interruption de réception de caractère

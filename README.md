@@ -20,4 +20,12 @@ Cette fonction est appelé par la fonction HAL_UART_RxCpltCallback qui est dans 
 L'allocation dynamique se fait dans le tas. Il y en a 2, un geré par la HAL et un geré par freeRTOS, nous on utilise celui géré par freeRTOS. 
 Sa taille est comprise dans l'utilisation de la RAM qu'on voit en bas à droite, si on augmente sa taille, on voit que la taille de la RAM utilisé augmente. 
 
-Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bout de la 12e tache généré. Si on augmente la taille du tas par 10, on est environ à 50% et on peut generer 127 taches 	
+Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bout de la 12e tache généré. Si on augmente la taille du tas par 10, on est environ à 50% et on peut generer 127 taches 
+
+
+![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/d4bd84f3-75fe-49a8-b9cf-8988fa8ba854)
+
+
+
+
+![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/9a78c097-3e1b-4458-acf6-dc1dc978c643)

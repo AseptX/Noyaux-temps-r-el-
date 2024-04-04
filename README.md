@@ -16,3 +16,8 @@ Si on utilise la fonction HAL_UART_Receive pour traiter les caractères, c'est u
 
 On utilise la fonction HAL_UART_Receive_IT (dans la fonction uart_read dans le fichier shell.C) qui active les interruptions sur caractere et on utilise un semaphore take pour bloquer la tache et qui est give par la fonction shell_uart_receive_irq_cb qui est dans le fichier shell.c
 Cette fonction est appelé par la fonction HAL_UART_RxCpltCallback qui est dans le fichier main et appelée lors d'une interruption de réception de caractère
+
+L'allocation dynamique se fait dans le tas. Il y en a 2, un geré par la HAL et un geré par freeRTOS, nous on utilise celui géré par freeRTOS. 
+Sa taille est comprise dans l'utilisation de la RAM qu'on voit en bas à droite, si on augmente sa taille, on voit que la taille de la RAM utilisé augmente. 
+
+Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bout de la 12e tache généré. Si on augmente la taille du tas par 10, on est environ à 50% et on peut generer 127 taches 	

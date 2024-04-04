@@ -61,6 +61,7 @@ void Error_Handler(void);
 #define LED_GPIO_Port GPIOI
 #define USER_BTN_Pin GPIO_PIN_11
 #define USER_BTN_GPIO_Port GPIOI
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

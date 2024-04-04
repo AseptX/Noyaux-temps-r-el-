@@ -20,4 +20,10 @@ Cette fonction est appelé par la fonction HAL_UART_RxCpltCallback qui est dans 
 L'allocation dynamique se fait dans le tas. Il y en a 2, un geré par la HAL et un geré par freeRTOS, nous on utilise celui géré par freeRTOS. 
 Sa taille est comprise dans l'utilisation de la RAM qu'on voit en bas à droite, si on augmente sa taille, on voit que la taille de la RAM utilisé augmente. 
 
-Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bout de la 12e tache généré. Si on augmente la taille du tas par 10, on est environ à 50% et on peut generer 127 taches 	
+Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bout de la 12e tache généré. Si on augmente la taille du tas par 10, on est environ à 50% et on peut generer 127 taches
+
+Un overflow, c'est quand on depassé la taille de la pile alloué à la tache (Contient ses variables locales). Sans activer la detection, l'OS ne detecte pas et ca peut être dangereux => Si on écrit en dehors de la pile de la tache on peut écrire sur des variables globales ect 
+On active la detecetion dans la gestion du micro et on écrit la fonction vApplicationStackOverflowHook dans laquelle le système va aller si il detecte l'overflow
+Dedans on allume un LED pour montrer qu'on est rentrer dedans et on va dans le error handler. 
+La taille de la pile d'un tache est defini à sa création (nous on a mis 256 en général). Pour tester l'overflow, j'ai mis 50 et testé de faire un printf dans la tache => Il detecte l'overflow que à un changement de tache donc on est rentré dans l'overflow à la fin de la tache 
+	

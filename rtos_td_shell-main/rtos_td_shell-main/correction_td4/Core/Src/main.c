@@ -73,16 +73,23 @@ int __io_putchar(int ch)
 
 	return ch;
 }
+void configureTimerForRunTimeStats(void)
+{
 
+
+}
+
+unsigned long getRunTimeCounterValue(void)
+{
+
+
+}
 
 void ftache1 (void * unused)
 {
-	vTaskSuspend(0); //Suspend la tache en cours (0 veux dire ca)
-
 	for(;;)
 	{
-		printf("%s\r\n", message);
-		vTaskDelay(delay_spam);
+//		printf("Tache 1 \r\n");
 	}
 }
 
@@ -199,6 +206,7 @@ void task_shell(void * unused)
 	shell_run();	// boucle infinie
 }
 
+//Tache appelé automatiquement si le systeme detecte un overflow
 void vApplicationStackOverflowHook( TaskHandle_t xTask,
                                     signed char *pcTaskName )
 {
@@ -242,7 +250,8 @@ int main(void)
 
 	sem1 = xSemaphoreCreateBinary();
 
-	while(1)
+	//Creation de tache pour depassement du tas
+	/*while(1)
 	{
 	 int i;
 	if( xTaskCreate(ftache1,	"BLINK_LED", 256, NULL,	3, &tache1) != pdPASS)
@@ -251,15 +260,25 @@ int main(void)
 			Error_Handler();
 		}
 	i++;
-	}
+	}*/
 
-	xTaskCreate(task_blink_led,
+	//Creation de tache pour depassement de la pile
+	xTaskCreate(ftache1,
+					"tache1",
+					50, //Taille de la pile
+					NULL, //parameter
+					0, //Priority
+					&tache1 //Allocation de la mémoire pour créer l'objet
+			);
+
+
+	/*xTaskCreate(task_blink_led,
 				"BLINK_LED",
 				256, //Taille de la pile
 				NULL, //parameter
 				3, //Priority
 				&handle_blink_led //Allocation de la mémoire pour créer l'objet
-		);
+		);*/
 
 	xTaskCreate(task_spam,
 					"SPAM",

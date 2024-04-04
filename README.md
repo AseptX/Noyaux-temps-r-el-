@@ -28,4 +28,3 @@ Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bo
 
 
 
-![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/9a78c097-3e1b-4458-acf6-dc1dc978c643)

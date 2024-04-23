@@ -25,6 +25,25 @@ Avec la taille de base on utilise environ 5% de la RAM et le tas est plein au bo
 
 ![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/d4bd84f3-75fe-49a8-b9cf-8988fa8ba854)
 
+3.3) On créer un timer qui doit compter entre 10 et 100 fois plus vite que le tick de l'OS (1ms). Le but est de compter le temps qu'on passe dans chaque tache
+Compter trop doucement peut nous faire perdre en précision si la tache est trop rapide et compter trop vite fait qu'on arrivera à la valeur max du timer plus vite
+Le timer a une horloge de 108  MHz, on met son prescaler à 10800 pour compter à 10 kHz. On écrit les deux fonctions donné dans le TP comme ceci : 
+
+//Active le timer 2
+void configureTimerForRunTimeStats(void)
+{
+	HAL_TIM_Base_Start(&htim2);
+}
+
+ //Renvois la valeur du timer
+unsigned long getRunTimeCounterValue(void)
+{
+	return __HAL_TIM_GET_COUNTER(&htim2);
+}
+
+Le calcul du temps passé dans les taches se fait automatiquement et on trouve  ca : 
+
+![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/d845ed8f-79b4-4928-9d64-ced8710dfee7)
 
 
 

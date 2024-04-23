@@ -45,5 +45,8 @@ Le calcul du temps passé dans les taches se fait automatiquement et on trouve  
 
 ![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/d845ed8f-79b4-4928-9d64-ced8710dfee7)
 
+Les fonctions vTaskGetRunTimeStats et vTaskList sont des fonctions qui existent deja. Elle vont écrire la même chose que la photo d'haut dessus dans la paramètre qu'on donne a la fonction. La doc dit 40 octets par task donc on créer un tableau de 400 caractères (un carac = un octet) dans lequel la fonction va écrire. 
+Ensuite on affiche le buffer quand la fonction vTaskGetRunTimeStats a écrit dedans puis on fait écire la fonction vTaskList dedans et on l'affiche, voila ce qu'on obtient : 
 
+![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/34997789-2808-40d9-86e1-0c1879620559)
 

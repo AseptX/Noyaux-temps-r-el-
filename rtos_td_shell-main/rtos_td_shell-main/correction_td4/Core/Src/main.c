@@ -218,7 +218,7 @@ int stats(int argc, char ** argv){
 
 HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	receive_multiple_data(0x32, data6, 6);
+	// TODO
 }
 
 int SPI(int argc, char ** argv){
@@ -260,6 +260,7 @@ int SPI(int argc, char ** argv){
 
 	while (HAL_GPIO_ReadPin(INT_GPIO_Port, INT_Pin) == 0);	// polling sur INT1
 
+	printf("INT1 detected\r\n");
 
 
 

@@ -50,3 +50,23 @@ Ensuite on affiche le buffer quand la fonction vTaskGetRunTimeStats a écrit ded
 
 ![image](https://github.com/AseptX/Noyaux-temps-r-el-/assets/144770585/34997789-2808-40d9-86e1-0c1879620559)
 
+Partie 4 : Le but est d'afficher les valeurs d'un accéleromètre 
+
+Le driver communique en SPI avec le STM. On règle la liaison comme donné dans le TP. 
+
+Pour communiquer avec le driver, on va utiliser la broche PB4, on l'a declaré en niveau logique haut par defaut. Quand on voudra envoyer une adresse de registre au driver, 
+on la mettera au niveau bas, pour faire ca on va utiliser la ligne HAL_GPIO_WritePin(NSS_GPIO_Port, NSS_Pin, GPIO_PIN_RESET);
+
+Ensuite, on va lui envoyer l'adresse du registre sur lequel on veut écrire ou lire avec la ligne HAL_SPI_Transmit(&hspi2, &address, 1, HAL_MAX_DELAY);
+Si on veut lire la valeur du registre, on va écrire la ligne HAL_SPI_Receive(&hspi2, p_data, size, HAL_MAX_DELAY); ou p_data est la variable dans laquelle on va ranger la valeur
+Si on veut écrire dans le registre, on écrit ca HAL_SPI_Transmit(&hspi2, data, size, HAL_MAX_DELAY); ou data est la valeur à écrire dans le registre. 
+
+Enfin, pour la dernière ligne on va écrire HAL_GPIO_WritePin(NSS_GPIO_Port, NSS_Pin, GPIO_PIN_SET); qui remet la broche à son niveau par defaut 
+
+On utilise le registre DEVID qui permet de tester la liaison SPI, il nous renvoit la valeur 0xE5 si elle est bonne. 
+On veut que le registre soit en mode mesure, pour se faire on écrit la valeur 0x08 dans le registre POWER_CTL. On veut qu'il declenche une interruption sur la broche 
+PG7 qui passera à 1 quand les data seront prête, on met la valeur 0x80 dans le registre INT_ENABLE
+
+On va scruter la broche PG7 et tant qu'elle est à 0, on reste bloqué, si elle passe à 1, on reccupère les valeurs. On le fait grace à cette ligne : while (HAL_GPIO_ReadPin(INT_GPIO_Port, INT_Pin) == 0);
+
+ 

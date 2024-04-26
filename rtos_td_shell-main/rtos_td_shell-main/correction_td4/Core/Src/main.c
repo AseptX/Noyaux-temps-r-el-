@@ -216,36 +216,63 @@ int stats(int argc, char ** argv){
 	return 0;
 }
 
-
+HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	receive_multiple_data(0x32, data6, 6);
+}
 
 int SPI(int argc, char ** argv){
 	uint8_t address_DEVID = 0x00, address_INT_enable = 0x2E, address_PWR_CTL = 0x2D;
-	uint8_t data = 0, data_INT_enable = 0x80, data_PWR_CTL = 0x04;
+	uint8_t data = 0, data_INT_enable = 0, data_PWR_CTL = 0;
 	uint16_t size = 1;
 
-	HAL_GPIO_WritePin(NSS_GPIO_Port, NSS_Pin, GPIO_PIN_RESET); //PB4 à 0 (PB4 = GPIO output)
-	HAL_SPI_Transmit(&hspi2, &address_DEVID, 1, HAL_MAX_DELAY);
-	//C'est à nous de definir le size du message du retour
-	HAL_SPI_Receive(&hspi2, &data, size, HAL_MAX_DELAY);
-	HAL_GPIO_WritePin(NSS_GPIO_Port, NSS_Pin, GPIO_PIN_SET);
+	uint8_t data6[6];
 
-	void receive (address_DEVID, data, size) {
+	receive(address_DEVID, &data, size);
 
-	}
+	printf("DEVID = 0x%X\r\n", data);
+
+	uint8_t test = 0;
+
+	transmit (address_INT_enable, &data_INT_enable, size);
+	transmit (address_PWR_CTL, &data_PWR_CTL, size);
+
+	receive(address_INT_enable, &test, 1);
+	printf("INT_Enable = %x\r\n", test);
+	receive(address_PWR_CTL, &test, 1);
+	printf("PWR_CTL = %x\r\n", test);
+
+	receive(address_INT_enable, &data_INT_enable, size);
+	data_INT_enable = data_INT_enable | 0x80;
+
+	receive(address_PWR_CTL, &data_PWR_CTL, size);
+	data_PWR_CTL = data_PWR_CTL | 0x08;
+
+	transmit (address_INT_enable, &data_INT_enable, size);
+	transmit (address_PWR_CTL, &data_PWR_CTL, size);
+
+	receive(address_INT_enable, &test, 1);
+	printf("INT_Enable = %x\r\n", test);
+	receive(address_PWR_CTL, &test, 1);
+	printf("PWR_CTL = %x\r\n", test);
+
+	//	for (int i = 0; i < 4; i++){
+
+	while (HAL_GPIO_ReadPin(INT_GPIO_Port, INT_Pin) == 0);	// polling sur INT1
 
 
 
-	printf("0x%X\r\n", data);
 
-	void transmit (address_INT_enable, data_INT_enable, size)
-	{
+	int16_t acc_x = (int16_t)(data6[0]) | (int16_t)(data6[1])<<8;
+	int16_t acc_y = (int16_t)(data6[2]) | (int16_t)(data6[3])<<8;
+	int16_t acc_z = (int16_t)(data6[4]) | (int16_t)(data6[5])<<8;
 
-	}
+	printf("Transmission de data : %d %d %d\r\n", acc_x, acc_y, acc_z);
 
-	void transmit (address_PWR_CTL, data_PWR_CTL, size)
-	{
 
-	}
+
+	//	}
+
 	return 0;
 }
 
